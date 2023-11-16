@@ -1,73 +1,65 @@
 "use strict";
-// function retorno<T>(a: T): T{
-//   return a;
-// }
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var _a, _b, _c;
-// console.log(retorno<string>('Algo'));
-// console.log(retorno<number>(200));
-// console.log(retorno<boolean>(true));
-const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const frutas = ['Banana', 'Maça', 'Uva', 'Laranja', 'Pera'];
-function firstFive(lista) {
-    return lista.slice(0, 5);
+var _a;
+function somar(a, b, c) {
+    return a + b + (c !== null && c !== void 0 ? c : 0);
 }
-console.log(firstFive(numeros));
-console.log(firstFive(frutas));
-function notNull(arg) {
-    if (arg !== null) {
-        return arg;
+somar(3, 4);
+const subtrair = (a, b) => a - b;
+subtrair(3, 4);
+function pintarTela(cor) {
+    document.body.style.backgroundColor = cor;
+}
+console.log(pintarTela('gray'));
+// Não é possível fazer uma checagem booleana se a função retornar void
+const btn = document.querySelector('button');
+btn === null || btn === void 0 ? void 0 : btn.click();
+// A partir do momento que haver qualquer tipo de retorno possível na função, ela não será mais void
+function isString(value) {
+    if (typeof value === 'string') {
+        return true;
     }
-    return null;
 }
-(_a = notNull('Algo')) === null || _a === void 0 ? void 0 : _a.toLowerCase();
-(_b = notNull(200)) === null || _b === void 0 ? void 0 : _b.toFixed(2);
-function tipoDado(a) {
-    const resultado = {
-        dado: a,
-        tipo: typeof a,
-    };
-    console.log(resultado);
-    return resultado;
+console.log(isString('Henrique'));
+console.log(isString(3));
+class FormaQuadrado {
+    constructor(lado) {
+        this.lado = lado;
+    }
+    ;
+    perimetro(lado) {
+        return lado * 4;
+    }
+    ;
 }
-tipoDado('Algo').dado;
-tipoDado(true).tipo;
-function extractText(el) {
-    return {
-        texto: el.innerText,
-        el,
-    };
+function calcularPerimetro(forma) {
+    return forma.perimetro(forma.lado);
 }
-const link = document.querySelector('a');
-if (link) {
-    console.log(extractText(link).el.href);
+console.log(calcularPerimetro(new FormaQuadrado(4)));
+function normalizarTexto(texto) {
+    if (typeof texto === 'string') {
+        return texto.trim().toLowerCase();
+    }
+    return texto.map((text) => text.trim().toLowerCase());
 }
-function $(selector) {
-    return document.querySelector(selector);
+console.log(normalizarTexto(' Henrique '));
+console.log(normalizarTexto([' Henrique ', ' Eduardo', ' João ']));
+function $Jquery(seletor) {
+    return document.querySelector(seletor);
 }
-const linkJquery = (_c = $('a')) === null || _c === void 0 ? void 0 : _c.href;
-const linkNovo = document.querySelector('.link');
-if (linkNovo instanceof HTMLAnchorElement) {
-    console.log(linkNovo.href);
+$Jquery('a');
+(_a = $Jquery('video')) === null || _a === void 0 ? void 0 : _a.volume;
+$Jquery('.item');
+function arredondarValor(valor) {
+    if (typeof valor === 'number') {
+        return Math.ceil(valor);
+    }
+    return Math.ceil(Number(valor)).toString();
 }
-function getData(url) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(url);
-        return yield response.json();
-    });
+console.log(arredondarValor(3.14));
+console.log(arredondarValor('3.14'));
+// Never, utilizado quando a função gera um erro
+function abortar(mensagem) {
+    throw new Error(mensagem);
 }
-function handleData() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const notebook = yield getData('https://api.origamid.dev/json/notebook.json');
-        console.log(notebook.nome);
-    });
-}
-handleData();
+abortar('Erro');
+console.log('Tente novamente');

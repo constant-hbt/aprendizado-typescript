@@ -1,80 +1,102 @@
-// function retorno<T>(a: T): T{
-//   return a;
-// }
-
-// console.log(retorno<string>('Algo'));
-// console.log(retorno<number>(200));
-// console.log(retorno<boolean>(true));
-
-const numeros = [1,2,3,4,5,6,7,8,9,10];
-const frutas: Array<string> = ['Banana', 'Maça', 'Uva', 'Laranja', 'Pera'];
-
-function firstFive<T>(lista: T[]): T[]{
-  return lista.slice(0,5);
+function somar(a: number, b: number, c?: number): number {
+  return a + b + (c ?? 0);
 }
 
-console.log(firstFive<number>(numeros));
-console.log(firstFive(frutas));
+somar(3, 4);
 
-function notNull<T>(arg: T | null): T | null {
-  if (arg !== null) {
-    return arg;
+const subtrair = (a: number, b: number) => a - b;
+
+subtrair(3, 4);
+
+type Callback = (event: MouseEvent) => void;
+
+function pintarTela(cor: string){
+  document.body.style.backgroundColor = cor;
+}
+
+console.log(pintarTela('gray'));
+
+// Não é possível fazer uma checagem booleana se a função retornar void
+const btn = document.querySelector('button');
+
+btn?.click();
+
+// A partir do momento que haver qualquer tipo de retorno possível na função, ela não será mais void
+function isString(value: any){
+  if (typeof value === 'string'){
+    return true;
   }
-  return null;
 }
 
-notNull('Algo')?.toLowerCase();
-notNull(200)?.toFixed(2);
+console.log(isString('Henrique'));
+console.log(isString(3));
 
-function tipoDado<T>(a: T): {dado: T, tipo: string} {
-  const resultado = {
-    dado: a,
-    tipo: typeof a,
+interface Quadrado{
+  lado: number;
+  perimetro(lado: number): number;
+}
+
+class FormaQuadrado implements Quadrado{
+  lado: number;
+  constructor(lado: number){
+    this.lado = lado;
   };
-  console.log(resultado);
-  return resultado;
+  perimetro(lado: number): number {
+    return lado * 4;
+  };
 }
 
-tipoDado('Algo').dado;
-tipoDado(true).tipo;
+function calcularPerimetro(forma: Quadrado): number{
+  return forma.perimetro(forma.lado);
+}
 
-function extractText<T extends HTMLElement>(el: T): {texto: string; el: T} {
-  return {
-    texto: el.innerText,
-    el,
+console.log (calcularPerimetro(new FormaQuadrado(4)));
+
+// Function Overloading
+function normalizarTexto(texto: string): string;
+function normalizarTexto(texto: string[]): string[];
+function normalizarTexto(texto: string | string[]): string | string[]{
+  if (typeof texto === 'string'){
+    return texto.trim().toLowerCase();
   }
+  return texto.map((text) => text.trim().toLowerCase());
 }
 
-const link = document.querySelector('a');
+console.log(normalizarTexto(' Henrique '));
+console.log(normalizarTexto([' Henrique ', ' Eduardo', ' João ']));
 
-if (link) {
-  console.log(extractText(link).el.href);
+// A declaração precisa respeitar o tipo de retorno e os tipos dos argumentos
+function $Jquery(seletor: 'a'): HTMLAnchorElement | null;
+function $Jquery(seletor: 'video'): HTMLVideoElement | null;
+function $Jquery(seletor: string): Element | null;
+function $Jquery(seletor: string): Element | null {
+  return document.querySelector(seletor);
 }
 
-function $<T extends Element>(selector: string): T | null{
-  return document.querySelector(selector);
+$Jquery('a');
+$Jquery('video')?.volume;
+$Jquery('.item');
+
+// Exercício
+// Crie uma função que arredonda um valor passado para cima
+// A função pode receber string ou number
+// A função deve retornar o mesmo tipo que ela recebe
+function arredondarValor(valor: string): string;
+function arredondarValor(valor: number): number;
+function arredondarValor(valor: number | string): number | string{
+  if (typeof valor === 'number'){
+    return Math.ceil(valor);
+  }
+  return Math.ceil(Number(valor)).toString();
 }
 
-const linkJquery = $<HTMLAnchorElement>('a')?.href;
+console.log(arredondarValor(3.14));
+console.log(arredondarValor('3.14'));
 
-const linkNovo = document.querySelector<HTMLAnchorElement>('.link');
-if (linkNovo instanceof HTMLAnchorElement) {
-  console.log(linkNovo.href);
+// Never, utilizado quando a função gera um erro
+function abortar(mensagem: string): never{
+  throw new Error(mensagem);
 }
 
-async function getData<T>(url: string): Promise<T>{
-  const response = await fetch(url);
-  return await response.json();
-}
-
-interface Notebook {
-  nome: string,
-  preco: number,
-}
-
-async function handleData(){
-  const notebook = await getData<Notebook>('https://api.origamid.dev/json/notebook.json');
-  console.log(notebook.nome);
-}
-
-handleData();
+abortar('Erro');
+console.log('Tente novamente');
