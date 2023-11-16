@@ -1,65 +1,65 @@
 "use strict";
-var _a;
-function somar(a, b, c) {
-    return a + b + (c !== null && c !== void 0 ? c : 0);
-}
-somar(3, 4);
-const subtrair = (a, b) => a - b;
-subtrair(3, 4);
-function pintarTela(cor) {
-    document.body.style.backgroundColor = cor;
-}
-console.log(pintarTela('gray'));
-// Não é possível fazer uma checagem booleana se a função retornar void
-const btn = document.querySelector('button');
-btn === null || btn === void 0 ? void 0 : btn.click();
-// A partir do momento que haver qualquer tipo de retorno possível na função, ela não será mais void
-function isString(value) {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+function typeGuard(value) {
     if (typeof value === 'string') {
-        return true;
+        return value.toLowerCase();
+    }
+    if (typeof value === 'number') {
+        return value.toFixed();
+    }
+    if (value instanceof HTMLElement) {
+        return value.innerText;
     }
 }
-console.log(isString('Henrique'));
-console.log(isString(3));
-class FormaQuadrado {
-    constructor(lado) {
-        this.lado = lado;
+typeGuard('Origamid');
+typeGuard(200);
+typeGuard(document.body);
+const obj = {
+    nome: 'Origamid',
+};
+if ('nome' in obj) {
+    console.log('sim');
+}
+function handleProduto(data) {
+    console.log(data);
+    if ('preco' in data) {
+        document.body.innerHTML = `
+    <h2>${data.nome}</h2>
+    <p>R$ ${data.preco + 100}</p>`;
     }
-    ;
-    perimetro(lado) {
-        return lado * 4;
+}
+function fetchProd() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield fetch('https://api.origamid.dev/json/notebook.json');
+        const json = yield response.json();
+        handleProduto(json);
+    });
+}
+fetchProd();
+// Unknown - Permite passar qualquer tipo de dado, 
+// porém para utilizá-lo precisa realizar o typeGuard para utilizá-lo
+// Garantindo a type safety
+function typeGuardUnknown(value) {
+    if (typeof value === 'string') {
+        return value.toLowerCase();
     }
-    ;
-}
-function calcularPerimetro(forma) {
-    return forma.perimetro(forma.lado);
-}
-console.log(calcularPerimetro(new FormaQuadrado(4)));
-function normalizarTexto(texto) {
-    if (typeof texto === 'string') {
-        return texto.trim().toLowerCase();
+    if (typeof value === 'number') {
+        return value.toFixed();
     }
-    return texto.map((text) => text.trim().toLowerCase());
-}
-console.log(normalizarTexto(' Henrique '));
-console.log(normalizarTexto([' Henrique ', ' Eduardo', ' João ']));
-function $Jquery(seletor) {
-    return document.querySelector(seletor);
-}
-$Jquery('a');
-(_a = $Jquery('video')) === null || _a === void 0 ? void 0 : _a.volume;
-$Jquery('.item');
-function arredondarValor(valor) {
-    if (typeof valor === 'number') {
-        return Math.ceil(valor);
+    if (value instanceof HTMLElement) {
+        return value.innerText;
     }
-    return Math.ceil(Number(valor)).toString();
 }
-console.log(arredondarValor(3.14));
-console.log(arredondarValor('3.14'));
-// Never, utilizado quando a função gera um erro
-function abortar(mensagem) {
-    throw new Error(mensagem);
-}
-abortar('Erro');
-console.log('Tente novamente');
+typeGuard('Origamid');
+typeGuard(200);
+typeGuard(document.body);
+// Any permite que seja passado qualquer tipo de dado, e não precisa realizar o typeGuard para utilizá-lo
+// Porém não tem nenhuma garantia de type safety

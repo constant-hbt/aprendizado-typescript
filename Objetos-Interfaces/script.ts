@@ -1,102 +1,67 @@
-function somar(a: number, b: number, c?: number): number {
-  return a + b + (c ?? 0);
-}
-
-somar(3, 4);
-
-const subtrair = (a: number, b: number) => a - b;
-
-subtrair(3, 4);
-
-type Callback = (event: MouseEvent) => void;
-
-function pintarTela(cor: string){
-  document.body.style.backgroundColor = cor;
-}
-
-console.log(pintarTela('gray'));
-
-// Não é possível fazer uma checagem booleana se a função retornar void
-const btn = document.querySelector('button');
-
-btn?.click();
-
-// A partir do momento que haver qualquer tipo de retorno possível na função, ela não será mais void
-function isString(value: any){
-  if (typeof value === 'string'){
-    return true;
+function typeGuard(value: any) {
+  if (typeof value === 'string') {
+    return value.toLowerCase();
+  }
+  if (typeof value === 'number') {
+    return value.toFixed();
+  }
+  if (value instanceof HTMLElement) {
+    return value.innerText;
   }
 }
 
-console.log(isString('Henrique'));
-console.log(isString(3));
+typeGuard('Origamid');
+typeGuard(200);
+typeGuard(document.body);
 
-interface Quadrado{
-  lado: number;
-  perimetro(lado: number): number;
+const obj = {
+  nome: 'Origamid',
 }
 
-class FormaQuadrado implements Quadrado{
-  lado: number;
-  constructor(lado: number){
-    this.lado = lado;
-  };
-  perimetro(lado: number): number {
-    return lado * 4;
-  };
+if ('nome' in obj){
+  console.log('sim');
 }
 
-function calcularPerimetro(forma: Quadrado): number{
-  return forma.perimetro(forma.lado);
+interface Produto {
+  nome: string;
+  preco: number;
 }
 
-console.log (calcularPerimetro(new FormaQuadrado(4)));
-
-// Function Overloading
-function normalizarTexto(texto: string): string;
-function normalizarTexto(texto: string[]): string[];
-function normalizarTexto(texto: string | string[]): string | string[]{
-  if (typeof texto === 'string'){
-    return texto.trim().toLowerCase();
+function handleProduto(data: Produto){
+  console.log(data);
+  if ('preco' in data){
+    document.body.innerHTML = `
+    <h2>${data.nome}</h2>
+    <p>R$ ${data.preco + 100}</p>`;
   }
-  return texto.map((text) => text.trim().toLowerCase());
 }
 
-console.log(normalizarTexto(' Henrique '));
-console.log(normalizarTexto([' Henrique ', ' Eduardo', ' João ']));
-
-// A declaração precisa respeitar o tipo de retorno e os tipos dos argumentos
-function $Jquery(seletor: 'a'): HTMLAnchorElement | null;
-function $Jquery(seletor: 'video'): HTMLVideoElement | null;
-function $Jquery(seletor: string): Element | null;
-function $Jquery(seletor: string): Element | null {
-  return document.querySelector(seletor);
+async function fetchProd(){
+  const response = await fetch('https://api.origamid.dev/json/notebook.json');
+  const json = await response.json();
+  handleProduto(json);
 }
 
-$Jquery('a');
-$Jquery('video')?.volume;
-$Jquery('.item');
+fetchProd();
 
-// Exercício
-// Crie uma função que arredonda um valor passado para cima
-// A função pode receber string ou number
-// A função deve retornar o mesmo tipo que ela recebe
-function arredondarValor(valor: string): string;
-function arredondarValor(valor: number): number;
-function arredondarValor(valor: number | string): number | string{
-  if (typeof valor === 'number'){
-    return Math.ceil(valor);
+// Unknown - Permite passar qualquer tipo de dado, 
+// porém para utilizá-lo precisa realizar o typeGuard para utilizá-lo
+// Garantindo a type safety
+function typeGuardUnknown(value: unknown) {
+  if (typeof value === 'string') {
+    return value.toLowerCase();
   }
-  return Math.ceil(Number(valor)).toString();
+  if (typeof value === 'number') {
+    return value.toFixed();
+  }
+  if (value instanceof HTMLElement) {
+    return value.innerText;
+  }
 }
 
-console.log(arredondarValor(3.14));
-console.log(arredondarValor('3.14'));
+typeGuard('Origamid');
+typeGuard(200);
+typeGuard(document.body);
 
-// Never, utilizado quando a função gera um erro
-function abortar(mensagem: string): never{
-  throw new Error(mensagem);
-}
-
-abortar('Erro');
-console.log('Tente novamente');
+// Any permite que seja passado qualquer tipo de dado, e não precisa realizar o typeGuard para utilizá-lo
+// Porém não tem nenhuma garantia de type safety
