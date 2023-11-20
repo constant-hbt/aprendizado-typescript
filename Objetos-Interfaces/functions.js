@@ -1,7 +1,6 @@
 "use strict";
-var _a;
 function somar(a, b, c) {
-    return a + b + (c !== null && c !== void 0 ? c : 0);
+    return a + b + (c ?? 0);
 }
 somar(3, 4);
 const subtrair = (a, b) => a - b;
@@ -12,7 +11,7 @@ function pintarTela(cor) {
 console.log(pintarTela('gray'));
 // Não é possível fazer uma checagem booleana se a função retornar void
 const btn = document.querySelector('button');
-btn === null || btn === void 0 ? void 0 : btn.click();
+btn?.click();
 // A partir do momento que haver qualquer tipo de retorno possível na função, ela não será mais void
 function isString(value) {
     if (typeof value === 'string') {
@@ -22,6 +21,7 @@ function isString(value) {
 console.log(isString('Henrique'));
 console.log(isString(3));
 class FormaQuadrado {
+    lado;
     constructor(lado) {
         this.lado = lado;
     }
@@ -47,7 +47,7 @@ function $Jquery(seletor) {
     return document.querySelector(seletor);
 }
 $Jquery('a');
-(_a = $Jquery('video')) === null || _a === void 0 ? void 0 : _a.volume;
+$Jquery('video')?.volume;
 $Jquery('.item');
 function arredondarValor(valor) {
     if (typeof valor === 'number') {

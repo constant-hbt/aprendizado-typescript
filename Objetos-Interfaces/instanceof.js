@@ -1,5 +1,7 @@
 "use strict";
 class Produto {
+    nome;
+    preco;
     constructor(nome, preco) {
         this.nome = nome;
         this.preco = preco;
@@ -11,12 +13,14 @@ class Produto {
 const livro = new Produto('A Guerra dos Tronos', 200);
 console.log(livro instanceof Produto);
 class Livro extends Produto {
+    autor;
     constructor(nome, preco, autor) {
         super(nome, preco);
         this.autor = autor;
     }
 }
 class Jogo extends Produto {
+    jogadores;
     constructor(nome, preco, jogadores) {
         super(nome, preco);
         this.jogadores = jogadores;

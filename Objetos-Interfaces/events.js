@@ -3,7 +3,7 @@ const button = document.querySelector('button');
 function handleClick(event) {
     console.log(event.pageX);
 }
-button === null || button === void 0 ? void 0 : button.addEventListener('pointerdown', handleClick);
+button?.addEventListener('pointerdown', handleClick);
 function handleScroll(event) {
     console.log(event);
 }
@@ -29,4 +29,4 @@ function handleClick2(event) {
         console.dir(element);
     }
 }
-button2 === null || button2 === void 0 ? void 0 : button2.addEventListener('click', handleClick2);
+button2?.addEventListener('click', handleClick2);

@@ -21,4 +21,4 @@ function handlePointerDown(event) {
         }
     }
 }
-buttonExercise === null || buttonExercise === void 0 ? void 0 : buttonExercise.addEventListener('pointerdown', handlePointerDown);
+buttonExercise?.addEventListener('pointerdown', handlePointerDown);

@@ -1,65 +1,48 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-function typeGuard(value) {
-    if (typeof value === 'string') {
-        return value.toLowerCase();
+// 1 - Crie uma interface UserData para o formulário abaixo
+// 2 - Crie uma variável global UserData no window, ela será um objeto qualquer
+// 3 - Adicione um evento de keyup ao formulário
+// 4 - Quando o evento ocorrer adicione a {[id]: value} ao UserData
+// 5 - Salve UserData no localStorage
+// 6 - Crie uma User Type Guard, para verificar se o valor de localStorage é compatível com UserData
+// 7 - Ao refresh da página, preencha os valores de localStorage (caso seja UserData) no formulário e em window.UserData
+function isUserData(data) {
+    return (data !== null &&
+        typeof data === 'object' &&
+        'nome' in data &&
+        'email' in data &&
+        'cpf' in data);
+}
+function validJSON(str) {
+    try {
+        JSON.parse(str);
     }
-    if (typeof value === 'number') {
-        return value.toFixed();
+    catch (e) {
+        return false;
     }
-    if (value instanceof HTMLElement) {
-        return value.innerText;
+    return true;
+}
+const form = document.getElementById('form');
+window.userData = {};
+function handleInputForm(event) {
+    const { id, value } = event.target;
+    window.userData[id] = value;
+    localStorage.setItem('userData', JSON.stringify(window.userData));
+}
+function handlePageLoad() {
+    const localStorageData = localStorage.getItem('userData');
+    if (localStorageData && validJSON(localStorageData)) {
+        const userData = JSON.parse(localStorageData);
+        if (isUserData(userData)) {
+            Object.entries(userData).forEach(([key, value]) => {
+                const input = document.getElementById(key);
+                if (input instanceof HTMLInputElement) {
+                    input.value = value;
+                    window.userData[key] = value;
+                }
+            });
+        }
     }
 }
-typeGuard('Origamid');
-typeGuard(200);
-typeGuard(document.body);
-const obj = {
-    nome: 'Origamid',
-};
-if ('nome' in obj) {
-    console.log('sim');
-}
-function handleProduto(data) {
-    console.log(data);
-    if ('preco' in data) {
-        document.body.innerHTML = `
-    <h2>${data.nome}</h2>
-    <p>R$ ${data.preco + 100}</p>`;
-    }
-}
-function fetchProd() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch('https://api.origamid.dev/json/notebook.json');
-        const json = yield response.json();
-        handleProduto(json);
-    });
-}
-fetchProd();
-// Unknown - Permite passar qualquer tipo de dado, 
-// porém para utilizá-lo precisa realizar o typeGuard para utilizá-lo
-// Garantindo a type safety
-function typeGuardUnknown(value) {
-    if (typeof value === 'string') {
-        return value.toLowerCase();
-    }
-    if (typeof value === 'number') {
-        return value.toFixed();
-    }
-    if (value instanceof HTMLElement) {
-        return value.innerText;
-    }
-}
-typeGuard('Origamid');
-typeGuard(200);
-typeGuard(document.body);
-// Any permite que seja passado qualquer tipo de dado, e não precisa realizar o typeGuard para utilizá-lo
-// Porém não tem nenhuma garantia de type safety
+form.addEventListener('keyup', handleInputForm);
+window.addEventListener('load', handlePageLoad);

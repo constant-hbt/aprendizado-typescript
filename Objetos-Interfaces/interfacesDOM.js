@@ -1,7 +1,7 @@
 "use strict";
 const video = document.querySelector('#videoprincipal');
 if (video instanceof HTMLVideoElement) {
-    console.log(video === null || video === void 0 ? void 0 : video.volume);
+    console.log(video?.volume);
 }
 const links = document.querySelectorAll('.link');
 links.forEach((link) => {
